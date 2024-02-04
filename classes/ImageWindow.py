@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 
 from .Binary import Binary
 from .HistogramWindow import HistogramWindow
+from .Hough import Hough
 from .Lab5 import Lab5
 from .LutWindow import LutWindow
 from .Morphology import Morphology
@@ -168,8 +169,8 @@ class ImageWindow(Window):
         menu_button.configure(menu=menu)
 
         # Add options to the menu
-        menu.add_command(label="Hough Transformation", command=self.op_fallback)
-
+        menu.add_command(label="Hough Transformation", command=self.show_hough)
+        menu.add_command(label="Hough Transformation Probabilistic", command=self.show_hough_probabilistic)
 
     def load_new_image(self):
         file_path = filedialog.askopenfilename()
@@ -480,6 +481,31 @@ class ImageWindow(Window):
                 writer.writeheader()
                 for feature in features:
                     writer.writerow(feature)
+
+    def show_hough(self):
+        threshold = simpledialog.askinteger("Threshold", "Select threshold value (if canceled 100 will be chosen):")
+        if threshold is None:
+            threshold = 100
+        hough = Hough(self.image)
+        image = hough.transform(threshold)
+        self.update_image(image)
+
+    def show_hough_probabilistic(self):
+        hough = Hough(self.image)
+        threshold = simpledialog.askinteger("Threshold", "Select threshold value (if canceled 100 will be chosen):")
+        min_line_length = simpledialog.askinteger("Min Line Length",
+                                                  "Select min line length (if canceled 100 will be chosen):")
+        max_line_gap = simpledialog.askinteger("Max Line Gap", "Select max line gap (if canceled 10 will be chosen):")
+        
+        if threshold is None:
+            threshold = 100
+        if min_line_length is None:
+            min_line_length = 100
+        if max_line_gap is None:
+            max_line_gap = 10
+
+        image = hough.transform_p(threshold, min_line_length, max_line_gap)
+        self.update_image(image)
 
     def op_fallback(self):
         pass
