@@ -73,7 +73,7 @@ class ImageWindow(Window):
         menu.add_command(label="Linear Stretching", command=self.show_linear_stretch)
         menu.add_command(label="Nonlinear Stretching", command=self.show_nonlinear_stretch)
         menu.add_command(label="Equalization", command=self.show_equalization)
-        menu.add_command(label="Histogram Stretching", command=self.show_histogram_stretching)
+        menu.add_command(label="p1-p2 to q3-q4 Stretching", command=self.show_histogram_stretching)
 
         menu_button = tk.Menubutton(top_panel, text="Single-arg", underline=0, padx=5)
         menu_button.pack(side=tk.LEFT)
@@ -159,6 +159,17 @@ class ImageWindow(Window):
         menu.add_command(label="Open", command=self.show_open)
         menu.add_command(label="Close", command=self.show_close)
         menu.add_command(label="Binary vector", command=self.show_features)
+
+        menu_button = tk.Menubutton(top_panel, text="Project", underline=0, padx=5)
+        menu_button.pack(side=tk.LEFT)
+
+        # Create a menu
+        menu = tk.Menu(menu_button, tearoff=0)
+        menu_button.configure(menu=menu)
+
+        # Add options to the menu
+        menu.add_command(label="Hough Transformation", command=self.op_fallback)
+
 
     def load_new_image(self):
         file_path = filedialog.askopenfilename()
